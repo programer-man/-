@@ -1,3 +1,12 @@
-<script setup></script>
-<template>1</template>
-<style scoped lang="less"></style>
+<template>
+  <!-- 一级路由出口 -->
+  <router-view></router-view>
+</template>
+
+<script>
+export default {
+  setup() {}
+}
+</script>
+
+<style></style>

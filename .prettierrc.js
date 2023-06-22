@@ -9,7 +9,7 @@ module.exports = {
   // 指定每个缩进级别的空格数
   tabWidth: 2,
   // 使用制表符而不是空格缩进行
-  useTabs: true,
+  useTabs: false,
   // 在语句末尾是否需要分号
   semi: false,
   // 是否使用单引号
@@ -19,7 +19,7 @@ module.exports = {
   // 在JSX中使用单引号而不是双引号
   jsxSingleQuote: false,
   // 多行时尽可能打印尾随逗号。（例如，单行数组永远不会出现逗号结尾。） 可选值"<none|es5|all>"，默认none
-  trailingComma: 'es5',
+  trailingComma: 'none',
   // 在对象文字中的括号之间打印空格
   bracketSpacing: true,
   // jsx 标签的反尖括号需要换行
