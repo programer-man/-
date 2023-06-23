@@ -10,7 +10,8 @@
         </template>
         <!-- 弹层 -->
         <div class="layer">
-          <h4>分类推荐 <small>根据您的购买或浏览记录推荐</small></h4>
+          <h4 v-if="currCategory">{{ currCategory.id === 'brand' ? '品牌' : '分类' }} <small>根据您的购买或浏览记录推荐</small></h4>
+          <!--分类弹出层 -->
           <ul v-if="currCategory && currCategory.goods && currCategory.goods.length">
             <li v-for="item in currCategory.goods" :key="item.id">
               <RouterLink to="/">
@@ -19,6 +20,19 @@
                   <p class="name ellipsis-2">{{ item.name }}</p>
                   <p class="desc ellipsis">{{ item.desc }}</p>
                   <p class="price"><i>¥</i>{{ item.price }}</p>
+                </div>
+              </RouterLink>
+            </li>
+          </ul>
+          <!-- 品牌弹出层 -->
+          <ul v-if="currCategory && currCategory.brands && currCategory.brands.length">
+            <li class="brand" v-for="item in currCategory.brands.slice(0, 9)" :key="item.id">
+              <RouterLink to="/">
+                <img :src="item.picture" alt="" />
+                <div class="info">
+                  <p class="place"><i class="iconfont icon-dingwei"></i>{{item.place}}</p>
+                  <p class="name ellipsis">{{ item.name }}</p>
+                  <p class="desc ellipsis-2">{{item.desc}}</p>
                 </div>
               </RouterLink>
             </li>
@@ -32,6 +46,7 @@
 <script>
 import { useStore } from 'vuex'
 import { reactive, computed, ref } from 'vue'
+import { findBrand } from '@/api/home.js'
 export default {
   name: 'HomeCategory',
   // 1. 获取vuex的一级分类，并且只需要两个二级分类
@@ -42,7 +57,8 @@ export default {
     const brand = reactive({
       id: 'brand',
       name: '品牌',
-      children: [{ id: 'brand-chilren', name: '品牌推荐' }]
+      children: [{ id: 'brand-chilren', name: '品牌推荐' }],
+      brands: []
     })
 
     const store = useStore()
@@ -65,6 +81,12 @@ export default {
     const currCategory = computed(() => {
       return menuList.value.find((item) => item.id === categoryId.value)
     })
+
+    // 获取品牌数据
+    findBrand().then((data) => {
+      brand.brands = data.result
+    })
+
     return { menuList, categoryId, currCategory }
   }
 }
@@ -164,6 +186,24 @@ export default {
         &:first-child {
           font-size: 16px;
         }
+      }
+    }
+  }
+}
+li.brand {
+  height: 180px;
+  a {
+    align-items: flex-start;
+    img {
+      width: 120px;
+      height: 160px;
+    }
+    .info {
+      p {
+        margin-top: 8px;
+      }
+      .place {
+        color: #999;
       }
     }
   }
