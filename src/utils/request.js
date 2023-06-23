@@ -55,3 +55,14 @@ instance.interceptors.response.use(
     return Promise.reject(err)
   }
 )
+
+// 请求工具函数
+export default (url, method, submitDate) => {
+  // 负责发请求： 请求地址，请求方式，提交的数据
+  return instance({
+    url,
+    method,
+    // 这里的意思就是，如果是get请求，携带的是params 反之则是data
+    [method.toLowerCase() === 'get' ? 'params' : 'data']: submitDate
+  })
+}
