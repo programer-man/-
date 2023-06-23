@@ -1,11 +1,9 @@
 <template>
-  <div>Top-Category</div>
+  <div>Sub-Category</div>
 </template>
-
 <script>
 export default {
-  name: 'TopCategory'
+  name: 'SubCategory'
 }
 </script>
-
 <style scoped lang="less"></style>
