@@ -1,34 +1,93 @@
 <template>
-  <div class="xtx-carousel">
+  <div class="xtx-carousel" @mouseleave="start" @mouseenter="stop">
     <ul class="carousel-body">
-      <li class="carousel-item" v-for="(item, i) in sliders" :key="i" :class="{fade:index===i}">
+      <li class="carousel-item" v-for="(item, i) in sliders" :key="i" :class="{ fade: index === i }">
         <RouterLink to="/">
           <img :src="item.imgUrl" alt="" />
         </RouterLink>
       </li>
     </ul>
-    <a href="javascript:;" class="carousel-btn prev"><i class="iconfont icon-angle-left"></i></a>
-    <a href="javascript:;" class="carousel-btn next"><i class="iconfont icon-angle-right"></i></a>
+    <a href="javascript:;" class="carousel-btn prev" @click="toggle(-1)"><i class="iconfont icon-angle-left"></i></a>
+    <a href="javascript:;" class="carousel-btn next" @click="toggle(1)"><i class="iconfont icon-angle-right"></i></a>
     <div class="carousel-indicator">
-      <span v-for="(item, i) in sliders" :key="i" :class="{active:index === i}"></span>
+      <span v-for="(item, i) in sliders" :key="i" :class="{ active: index === i }" @click="index = i"></span>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { onUnmounted, ref, watch } from 'vue'
 export default {
   name: 'XtxCarousel',
   props: {
     sliders: {
       type: Array,
       default: () => []
+    },
+    duration: {
+      type: Number,
+      default: 3000
+    },
+    autoPlay: {
+      type: Boolean,
+      default: false
     }
   },
-  setup() {
+  setup(props) {
     // 默认显示的图片索引
     const index = ref(0)
-    return { index }
+    // 自动播放
+    let timer = null
+    const autoPlayFn = () => {
+      clearInterval(timer)
+      timer = setInterval(() => {
+        index.value++
+        if (index.value >= props.sliders.length) {
+          index.value = 0
+        }
+      }, props.duration)
+    }
+
+    watch(
+      () => props.sliders,
+      (newVal) => {
+        // 有数据开启自动播放，才调用自动播放函数
+        if (newVal.length && props.autoPlay) {
+          index.value = 0
+          autoPlayFn()
+        }
+      },
+      { immediate: true }
+    )
+    //  鼠标进入图片区域停止自动播放 离开则开始自动播放
+    const stop = () => {
+      if (timer) clearInterval(timer)
+    }
+
+    const start = () => {
+      if (props.sliders.length && props.autoPlay) {
+        autoPlayFn()
+      }
+    }
+    // 指示器切换上一张下一张
+    const toggle = (step) => {
+      const newIndex = index.value + step
+      if (newIndex >= props.sliders.length) {
+        index.value = 0
+        return
+      }
+      if (newIndex < 0) {
+        index.value = props.sliders.length - 1
+        return
+      }
+      index.value = newIndex
+    }
+
+    // 组件消耗，清理定时器
+    onUnmounted(() => {
+      clearInterval(timer)
+    })
+    return { index, stop, start, toggle }
   }
 }
 </script>
