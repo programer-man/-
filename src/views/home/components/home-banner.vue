@@ -1,6 +1,6 @@
 <template>
   <div class="home-banner">
-    <XtxCarousel auto-play :sliders="sliders"/>
+    <XtxCarousel auto-play :sliders="sliders" />
   </div>
 </template>
 <script>
@@ -25,13 +25,14 @@ export default {
   left: 0;
   top: 0;
   z-index: 98;
-  .xtx-carousel {
-    ::v-deep .carousel-btn.prev {
-      left: 270px;
-    }
-    ::v-deep .carousel-indicator {
-      padding-left: 250px;
-    }
+}
+// 覆盖样式
+.xtx-carousel {
+  :deep(.carousel-btn.prev) {
+    left: 270px;
+  }
+  :deep(.carousel-indicator) {
+    padding-left: 250px;
   }
 }
 </style>
