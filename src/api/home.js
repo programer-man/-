@@ -13,3 +13,8 @@ export const findBanner = () => {
 export const findNew = () => {
   return request('/home/new', 'get')
 }
+
+// 获取人气推荐模块的数据
+export const findHot = () => {
+  return request('/home/hot', 'get')
+}
