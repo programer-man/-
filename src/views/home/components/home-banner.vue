@@ -1,11 +1,20 @@
 <template>
   <div class="home-banner">
-    <XtxCarousel />
+    <XtxCarousel  :sliders="sliders"/>
   </div>
 </template>
 <script>
+import { findBanner } from '@/api/home'
+import { ref } from 'vue'
 export default {
-  name: 'HomeBanner'
+  name: 'HomeBanner',
+  setup() {
+    const sliders = ref([])
+    findBanner().then((data) => {
+      sliders.value = data.result
+    })
+    return { sliders }
+  }
 }
 </script>
 <style scoped lang="less">
@@ -17,12 +26,12 @@ export default {
   top: 0;
   z-index: 98;
   .xtx-carousel {
-  ::v-deep .carousel-btn.prev {
-    left: 270px;
+    ::v-deep .carousel-btn.prev {
+      left: 270px;
+    }
+    ::v-deep .carousel-indicator {
+      padding-left: 250px;
+    }
   }
-  ::v-deep .carousel-indicator {
-    padding-left: 250px;
-  }
-}
 }
 </style>
